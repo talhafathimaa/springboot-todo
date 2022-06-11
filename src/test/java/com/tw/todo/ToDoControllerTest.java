@@ -78,4 +78,23 @@ public class ToDoControllerTest {
         verify(toDoService, times(1)).saveToDo(toDo);
     }
 
+    @Test
+    public void shouldReturnUpdatedToDoAndStatusAsCreatedWhenPutToDoEndPointIsAccessed() throws Exception {
+        ToDo toDo = new ToDo( 1,"eat", false);
+        ToDo newToDo = new ToDo( 1,"sing", false);
+        when(toDoService.updateToDo(toDo.getId(), newToDo)).thenReturn(newToDo);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/todo/{id}",toDo.getId()).content(objectMapper.writeValueAsString(newToDo)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.id").value(newToDo.getId())).andExpect(jsonPath("$.text").value(newToDo.getText())).andExpect(jsonPath("$.completed").value(newToDo.isCompleted())).andDo(print());
+        verify(toDoService, times(1)).updateToDo(toDo.getId(), newToDo);
+    }
+
+    @Test
+    public void shouldReturnStatusAsNotFoundWhenPutToDoEndPointIsAccessedAndIdDoesNotExists() throws Exception {
+        ToDo toDo = new ToDo( 1,"eat", false);
+        when(toDoService.updateToDo(any(Integer.class),any(ToDo.class))).thenThrow(IdNotFoundException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/todo/{id}",2).content(objectMapper.writeValueAsString(toDo)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound()).andDo(print());
+        verify(toDoService, times(1)).updateToDo(2, toDo);
+    }
+
 }

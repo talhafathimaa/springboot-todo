@@ -42,4 +42,18 @@ public class ToDoRepositoryTest {
 
         assertEquals(expectedToDo, actualToDo);
     }
+
+    @Test
+    void shouldBeAbleToUpdateAnExistingToDoAndReturnUpdatedToDo() {
+        ToDo toDo = new ToDo( "play", false);
+        toDoRepository.save(toDo);
+
+        ToDo existingToDo=toDoRepository.findById(toDo.getId()).get();
+        existingToDo.setText("practice singing");
+        existingToDo.setCompleted(true);
+        ToDo updatedToDo=toDoRepository.save(existingToDo);
+
+        assertEquals("practice singing",updatedToDo.getText());
+        assertEquals(true,updatedToDo.isCompleted());
+    }
 }

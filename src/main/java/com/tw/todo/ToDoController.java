@@ -45,4 +45,14 @@ public class ToDoController {
         }
     }
 
+    @PutMapping("/todo/{id}")
+    public ResponseEntity updateTodo(@PathVariable Integer id ,@RequestBody ToDo toDo) throws IdNotFoundException {
+        try {
+            ToDo updatedToDo = toDoService.updateToDo(id,toDo);
+            return new ResponseEntity(updatedToDo, HttpStatus.CREATED);
+        }catch (IdNotFoundException exception){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

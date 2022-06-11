@@ -34,4 +34,11 @@ public class ToDoService {
         return toDoRepository.save(toDo);
     }
 
+    public ToDo updateToDo(Integer id, ToDo toDo) throws IdNotFoundException {
+        ToDo existingToDo=toDoRepository.findById(id).orElseThrow(IdNotFoundException::new);
+        existingToDo.setText(toDo.getText());
+        existingToDo.setCompleted(toDo.isCompleted());
+        return toDoRepository.save(existingToDo);
+    }
+
 }

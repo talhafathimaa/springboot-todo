@@ -74,4 +74,29 @@ public class ToDoServiceTest {
         assertEquals(expectedToDo,savedToDo);
         verify(toDoRepository,times(1)).save(expectedToDo);
     }
+
+    @Test
+    void shouldUpdateToDoAndReturnUpdatedToDoWhenUpdateToDoIsCalled() throws IdNotFoundException {
+        ToDo existingToDo = new ToDo(1,"eat", false);
+        ToDo newToDo = new ToDo(1,"sleep", false);
+        when(toDoRepository.findById(existingToDo.getId())).thenReturn(Optional.of(existingToDo));
+        when(toDoRepository.save(newToDo)).thenReturn(newToDo);
+
+        ToDo updatedToDo=toDoService.updateToDo(existingToDo.getId(), newToDo);
+
+        assertEquals(updatedToDo.getText(),newToDo.getText());
+        verify(toDoRepository,times(1)).save(newToDo);
+        verify(toDoRepository,times(1)).findById(existingToDo.getId());
+    }
+
+    @Test
+    public void shouldThrowIdNotFoundExceptionWhenUpdateToDoIsCalledAndIdIsNotPresent(){
+        ToDo newToDo = new ToDo(1,"sleep", false);
+        when(toDoRepository.findById(any(Integer.class))).thenReturn(Optional.empty());
+
+        assertThrows(IdNotFoundException.class,()->toDoService.updateToDo(2,newToDo));
+        verify(toDoRepository,times(1)).findById(2);
+        verify(toDoRepository,never()).save(newToDo);
+    }
+
 }
