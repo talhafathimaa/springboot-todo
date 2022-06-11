@@ -23,4 +23,14 @@ public class ToDoRepositoryTest {
 
         assertEquals(expectedToDos, actualToDos);
     }
+
+    @Test
+    void shouldReturnToDoByIdWhenFindByIdIsCalled() {
+        ToDo expectedToDo = new ToDo( "Do the dishes", false);
+        toDoRepository.save(expectedToDo);
+
+        ToDo actualToDo = toDoRepository.findById(expectedToDo.getId()).get();
+
+        assertEquals(expectedToDo, actualToDo);
+    }
 }
