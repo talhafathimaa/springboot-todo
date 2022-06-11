@@ -1,6 +1,7 @@
 package com.tw.todo;
 
 import com.tw.todo.exception.IdNotFoundException;
+import com.tw.todo.exception.ToDoAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,5 +52,26 @@ public class ToDoServiceTest {
 
         assertThrows(IdNotFoundException.class,()->toDoService.getToDo(1));
         verify(toDoRepository,times(1)).findById(1);
+    }
+
+    @Test
+    public void shouldThrowToDoAlreadyExistsExceptionWhenSaveToDoIsCalledAndTextIsAlreadyPresent(){
+        ToDo expectedToDo = new ToDo(1,"eat", false);
+        when(toDoRepository.findByText(expectedToDo.getText())).thenReturn(Optional.of(expectedToDo));
+
+        assertThrows(ToDoAlreadyExistsException.class,()->toDoService.saveToDo(expectedToDo));
+        verify(toDoRepository,never()).save(any(ToDo.class));
+    }
+
+    @Test
+    public void shouldSaveToDoAndReturnSavedToDoWhenSaveToDoIsCalled() throws ToDoAlreadyExistsException {
+        ToDo expectedToDo = new ToDo(1,"eat", false);
+        when(toDoRepository.findByText(expectedToDo.getText())).thenReturn(Optional.empty());
+        when(toDoRepository.save(expectedToDo)).thenReturn(expectedToDo);
+
+        ToDo savedToDo = toDoService.saveToDo(expectedToDo);
+
+        assertEquals(expectedToDo,savedToDo);
+        verify(toDoRepository,times(1)).save(expectedToDo);
     }
 }

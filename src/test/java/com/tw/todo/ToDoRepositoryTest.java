@@ -33,4 +33,13 @@ public class ToDoRepositoryTest {
 
         assertEquals(expectedToDo, actualToDo);
     }
+
+    @Test
+    void shouldBeAbleToSaveToDoAndReturnSavedToDoWhenSaveIsCalled() {
+        ToDo expectedToDo = new ToDo( "cook", false);
+
+        ToDo actualToDo=toDoRepository.save(expectedToDo);
+
+        assertEquals(expectedToDo, actualToDo);
+    }
 }

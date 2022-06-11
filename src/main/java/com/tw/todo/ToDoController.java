@@ -1,12 +1,11 @@
 package com.tw.todo;
 
 import com.tw.todo.exception.IdNotFoundException;
+import com.tw.todo.exception.ToDoAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,6 +32,16 @@ public class ToDoController {
             return new ResponseEntity(todo, HttpStatus.OK);
         } catch (IdNotFoundException exception) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/todo")
+    public ResponseEntity saveToDo(@RequestBody ToDo toDo){
+        try {
+            ToDo todo = toDoService.saveToDo(toDo);
+            return new ResponseEntity(todo, HttpStatus.OK);
+        } catch (ToDoAlreadyExistsException exception) {
+            return new ResponseEntity(HttpStatus.CONFLICT);
         }
     }
 

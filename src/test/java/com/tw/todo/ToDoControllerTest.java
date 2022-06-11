@@ -2,6 +2,7 @@ package com.tw.todo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tw.todo.exception.IdNotFoundException;
+import com.tw.todo.exception.ToDoAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,11 +20,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+
 @WebMvcTest(ToDoController.class)
 public class ToDoControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     private ToDoService toDoService;
@@ -54,4 +59,23 @@ public class ToDoControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/todo/{id}",2)).andExpect(status().isNotFound()).andDo(print());
         verify(toDoService, times(1)).getToDo(2);
     }
+
+    @Test
+    public void shouldReturnSavedToDoAndStatusAsOkWhenPostToDoEndPointIsAccessed() throws Exception {
+        ToDo toDo = new ToDo( 1,"eat", false);
+        when(toDoService.saveToDo(toDo)).thenReturn(toDo);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/todo").content(objectMapper.writeValueAsString(toDo)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.id").value(toDo.getId())).andExpect(jsonPath("$.text").value(toDo.getText())).andExpect(jsonPath("$.completed").value(toDo.isCompleted())).andDo(print());
+        verify(toDoService, times(1)).saveToDo(toDo);
+    }
+
+    @Test
+    public void shouldReturnStatusAsConflictWhenPostToDoEndPointIsAccessedAndToDoAlreadyExists() throws Exception {
+        ToDo toDo = new ToDo( 1,"eat", false);
+        when(toDoService.saveToDo(any(ToDo.class))).thenThrow(ToDoAlreadyExistsException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/todo").content(objectMapper.writeValueAsString(toDo)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isConflict()).andDo(print());
+        verify(toDoService, times(1)).saveToDo(toDo);
+    }
+
 }
