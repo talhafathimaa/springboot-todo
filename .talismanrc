@@ -1,0 +1,4 @@
+fileignoreconfig:
+- filename: src/main/resources/db/migration/V1.1__CreateToDosTable.sql
+  checksum: 4a583537efd95778b2f1cdf5f03e2a71f9a5ef31ff7d999a53aceeb1970b266d
+version: ""
