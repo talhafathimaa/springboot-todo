@@ -41,4 +41,8 @@ public class ToDoService {
         return toDoRepository.save(existingToDo);
     }
 
+    public void deleteToDo(Integer id) {
+        toDoRepository.deleteById(id);
+    }
+
 }

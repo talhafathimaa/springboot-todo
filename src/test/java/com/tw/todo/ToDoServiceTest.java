@@ -99,4 +99,14 @@ public class ToDoServiceTest {
         verify(toDoRepository,never()).save(newToDo);
     }
 
+    @Test
+    void shouldDeleteToDoByIdWhenDeleteToDoIsCalled() {
+        ToDo expectedToDo = new ToDo(1,"eat", false);
+        doNothing().when(toDoRepository).deleteById(expectedToDo.getId());
+
+        toDoService.deleteToDo(expectedToDo.getId());
+
+        verify(toDoRepository,times(1)).deleteById(expectedToDo.getId());
+    }
+
 }

@@ -55,4 +55,10 @@ public class ToDoController {
         }
     }
 
+    @DeleteMapping("/todo/{id}")
+    public ResponseEntity deleteToDo(@PathVariable Integer id){
+        toDoService.deleteToDo(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
 }

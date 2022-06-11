@@ -97,4 +97,14 @@ public class ToDoControllerTest {
         verify(toDoService, times(1)).updateToDo(2, toDo);
     }
 
+    @Test
+    void shouldDeleteToDoByIdAndReturnStatusAsOkWhenDeleteToDoEndPointIsAccessed() throws Exception {
+        ToDo toDo = new ToDo(1,"eat", false);
+        doNothing().when(toDoService).deleteToDo(toDo.getId());
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/todo/{id}",toDo.getId())).andExpect(status().isOk()).andDo(print());
+
+        verify(toDoService,times(1)).deleteToDo(toDo.getId());
+    }
+
 }

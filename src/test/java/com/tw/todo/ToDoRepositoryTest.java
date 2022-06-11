@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
@@ -55,5 +57,16 @@ public class ToDoRepositoryTest {
 
         assertEquals("practice singing",updatedToDo.getText());
         assertEquals(true,updatedToDo.isCompleted());
+    }
+
+    @Test
+    void shouldBeAbleToDeleteToDoWhenIdIsGiven() {
+        ToDo toDo = new ToDo( "drink", false);
+        ToDo actualToDo=toDoRepository.save(toDo);
+
+        toDoRepository.deleteById(toDo.getId());
+        Optional<ToDo> optionalToDo = toDoRepository.findById(toDo.getId());
+
+        assertThat(optionalToDo.isEmpty());
     }
 }
