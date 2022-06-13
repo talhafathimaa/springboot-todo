@@ -1,7 +1,5 @@
 package com.tw.todo;
 
-import com.sun.istack.NotNull;
-
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -15,6 +13,17 @@ public class ToDo {
     private boolean completed;
 
     public ToDo() {
+    }
+
+    public ToDo(Integer id, String text, boolean completed) {
+        this.id = id;
+        this.text = text;
+        this.completed = completed;
+    }
+
+    public ToDo(String text, boolean completed) {
+        this.text = text;
+        this.completed = completed;
     }
 
     public Integer getId() {
@@ -61,17 +70,6 @@ public class ToDo {
     @Override
     public int hashCode() {
         return Objects.hash(id, text, completed);
-    }
-
-    public ToDo(Integer id, String text, boolean completed) {
-        this.id = id;
-        this.text = text;
-        this.completed = completed;
-    }
-
-    public ToDo(String text, boolean completed) {
-        this.text = text;
-        this.completed = completed;
     }
 
 }

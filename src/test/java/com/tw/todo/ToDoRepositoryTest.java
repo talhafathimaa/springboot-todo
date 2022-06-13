@@ -18,7 +18,7 @@ public class ToDoRepositoryTest {
 
     @Test
     void shouldReturnAllToDosWhenFindAllIsCalled() {
-        List<ToDo> expectedToDos = List.of(new ToDo( "eat", false), new ToDo( "sleep", true));
+        List<ToDo> expectedToDos = List.of(new ToDo("eat", false), new ToDo("sleep", true));
         toDoRepository.saveAll(expectedToDos);
 
         List<ToDo> actualToDos = toDoRepository.findAll();
@@ -28,7 +28,7 @@ public class ToDoRepositoryTest {
 
     @Test
     void shouldReturnToDoByIdWhenFindByIdIsCalled() {
-        ToDo expectedToDo = new ToDo( "Do the dishes", false);
+        ToDo expectedToDo = new ToDo("Do the dishes", false);
         toDoRepository.save(expectedToDo);
 
         ToDo actualToDo = toDoRepository.findById(expectedToDo.getId()).get();
@@ -38,31 +38,31 @@ public class ToDoRepositoryTest {
 
     @Test
     void shouldBeAbleToSaveToDoAndReturnSavedToDoWhenSaveIsCalled() {
-        ToDo expectedToDo = new ToDo( "cook", false);
+        ToDo expectedToDo = new ToDo("cook", false);
 
-        ToDo actualToDo=toDoRepository.save(expectedToDo);
+        ToDo actualToDo = toDoRepository.save(expectedToDo);
 
         assertEquals(expectedToDo, actualToDo);
     }
 
     @Test
     void shouldBeAbleToUpdateAnExistingToDoAndReturnUpdatedToDo() {
-        ToDo toDo = new ToDo( "play", false);
+        ToDo toDo = new ToDo("play", false);
         toDoRepository.save(toDo);
 
-        ToDo existingToDo=toDoRepository.findById(toDo.getId()).get();
+        ToDo existingToDo = toDoRepository.findById(toDo.getId()).get();
         existingToDo.setText("practice singing");
         existingToDo.setCompleted(true);
-        ToDo updatedToDo=toDoRepository.save(existingToDo);
+        ToDo updatedToDo = toDoRepository.save(existingToDo);
 
-        assertEquals("practice singing",updatedToDo.getText());
-        assertEquals(true,updatedToDo.isCompleted());
+        assertEquals("practice singing", updatedToDo.getText());
+        assertEquals(true, updatedToDo.isCompleted());
     }
 
     @Test
     void shouldBeAbleToDeleteToDoWhenIdIsGiven() {
-        ToDo toDo = new ToDo( "drink", false);
-        ToDo actualToDo=toDoRepository.save(toDo);
+        ToDo toDo = new ToDo("drink", false);
+        ToDo actualToDo = toDoRepository.save(toDo);
 
         toDoRepository.deleteById(toDo.getId());
         Optional<ToDo> optionalToDo = toDoRepository.findById(toDo.getId());

@@ -1,4 +1,4 @@
 package com.tw.todo.exception;
 
-public class ToDoAlreadyExistsException extends Exception{
+public class ToDoAlreadyExistsException extends Exception {
 }

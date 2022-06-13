@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ToDoRepository extends JpaRepository<ToDo,Integer> {
+public interface ToDoRepository extends JpaRepository<ToDo, Integer> {
     Optional<ToDo> findByText(String text);
 }

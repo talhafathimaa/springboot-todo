@@ -28,14 +28,14 @@ public class ToDoService {
 
     public ToDo saveToDo(ToDo toDo) throws ToDoAlreadyExistsException {
         Optional<ToDo> toDoOptional = toDoRepository.findByText(toDo.getText());
-        if(toDoOptional.isPresent()){
+        if (toDoOptional.isPresent()) {
             throw new ToDoAlreadyExistsException();
         }
         return toDoRepository.save(toDo);
     }
 
     public ToDo updateToDo(Integer id, ToDo toDo) throws IdNotFoundException {
-        ToDo existingToDo=toDoRepository.findById(id).orElseThrow(IdNotFoundException::new);
+        ToDo existingToDo = toDoRepository.findById(id).orElseThrow(IdNotFoundException::new);
         existingToDo.setText(toDo.getText());
         existingToDo.setCompleted(toDo.isCompleted());
         return toDoRepository.save(existingToDo);

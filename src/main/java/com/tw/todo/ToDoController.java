@@ -20,8 +20,8 @@ public class ToDoController {
     }
 
     @GetMapping("/todos")
-    public ResponseEntity getToDos(){
-        List<ToDo> todos=toDoService.getToDos();
+    public ResponseEntity getToDos() {
+        List<ToDo> todos = toDoService.getToDos();
         return new ResponseEntity(todos, HttpStatus.OK);
     }
 
@@ -36,7 +36,7 @@ public class ToDoController {
     }
 
     @PostMapping("/todo")
-    public ResponseEntity saveToDo(@RequestBody ToDo toDo){
+    public ResponseEntity saveToDo(@RequestBody ToDo toDo) {
         try {
             ToDo todo = toDoService.saveToDo(toDo);
             return new ResponseEntity(todo, HttpStatus.OK);
@@ -46,17 +46,17 @@ public class ToDoController {
     }
 
     @PutMapping("/todo/{id}")
-    public ResponseEntity updateTodo(@PathVariable Integer id ,@RequestBody ToDo toDo) throws IdNotFoundException {
+    public ResponseEntity updateTodo(@PathVariable Integer id, @RequestBody ToDo toDo) throws IdNotFoundException {
         try {
-            ToDo updatedToDo = toDoService.updateToDo(id,toDo);
+            ToDo updatedToDo = toDoService.updateToDo(id, toDo);
             return new ResponseEntity(updatedToDo, HttpStatus.CREATED);
-        }catch (IdNotFoundException exception){
+        } catch (IdNotFoundException exception) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/todo/{id}")
-    public ResponseEntity deleteToDo(@PathVariable Integer id){
+    public ResponseEntity deleteToDo(@PathVariable Integer id) {
         toDoService.deleteToDo(id);
         return new ResponseEntity(HttpStatus.OK);
     }
